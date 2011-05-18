@@ -1,15 +1,14 @@
-=====================
-Sztuczna inteligencja
-=====================
-
-Specyfikacja projektu
-=====================
-
+=============================================
+Sztuczna inteligencja - Specyfikacja projektu
+=============================================
 Temat: "Hierarchiczne grupowanie danych"
-----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Paweł Tomkiel i Rafał Selewońko
--------------------------------
+:Authors: Rafał Selewońko, Paweł Tomkiel
+:Version: $Revision: 1 $
+:Copyright: This document has been placed in the public domain.
+
+.. contents::
 
 Wprowadzanie i pobieranie danych
 --------------------------------
