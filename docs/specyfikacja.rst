@@ -35,11 +35,11 @@ Obliczenia
 
 Algorytm grupujący hierarchicznie dane opiera się na kilku prostych 
 krokach::
+
     1. Tworzy m grup zawierających po jednym obiekcie
     2. Wyznacza odległości między grupami
     3. Znajduje parę najbliższych grup i łączy je w jedną grupę
-    4. Wyznacz jeszcze raz odległości między nową grupą a pzoostałymi 
-grupami
+    4. Wyznacz jeszcze raz odległości między nową grupą a pzoostałymi grupami
     5. Powtarzaj kroki aż do momentu gdy pozostanie zadana liczba grup
 
 Finalizacja
