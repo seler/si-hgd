@@ -1,8 +1,9 @@
 =============================================
 Sztuczna inteligencja - Specyfikacja projektu
 =============================================
+----------------------------------------
 Temat: "Hierarchiczne grupowanie danych"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
 :Autorzy: Rafał Selewońko, Paweł Tomkiel
 :Grupa: PS8 
@@ -11,7 +12,7 @@ Temat: "Hierarchiczne grupowanie danych"
 .. spis treści::
 
 Wprowadzanie i pobieranie danych
---------------------------------
+================================
 
 Projekt uruchamia się widokiem pod-aplikacji pozwalającej na wybór 
 katalogu, w którym przechowywane są pliki danych. Wszystkie pliki są 
@@ -20,7 +21,7 @@ wyświetlenia w jego prawej części. Istnieje osobny przycisk do
 załadowania katalogu i osobny do wyświetlenie pliku.
 
 Pobieranie parametrów zadania
------------------------------
+=============================
 
 Po załadowaniu pliku będzie możliwe(projekt jest nadal w fazie 
 budowania) uruchomienie aplikacji głównej zajmującej się obliczeniami. 
@@ -30,7 +31,7 @@ hierarchicznego danych i będą wyświetlane oraz wizualizowane wyniki
 obliczeń.
 
 Obliczenia
-----------
+==========
 
 Algorytm grupujący hierarchicznie dane opiera się na kilku prostych 
 krokach::
@@ -42,7 +43,7 @@ krokach::
     5. Powtarzaj kroki aż do momentu gdy pozostanie zadana liczba grup
 
 Finalizacja
------------
+===========
 
 Po przeprowadzeniu wszystkich obliczeń i pogrupowaniu obiektów projekt 
 będzie wizualizował(w osobnym oknie) w przestrzeni dwuwymiarowej 
