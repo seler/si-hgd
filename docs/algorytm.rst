@@ -13,4 +13,4 @@ Temat: "Hierarchiczne grupowanie danych"
 7. Połączenie w jedną grupę grup najbardziej do siebie podobnych
 8. Wyznaczenie odległości pomiędzy nowo utworzoną grupą a pozostaymi grupami
 9. Jeżeli liczba grup jest mniejsza od zadanej przejście do kroku 7
-10. Wyświetlenie wyników
+10. Wyświetlenie wyników	
