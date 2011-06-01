@@ -32,15 +32,19 @@ import javax.swing.JScrollPane;
  */
 public class SIProjektView extends FrameView {
     File[] files;
+    String[] filesstr;
 
     public SIProjektView(SingleFrameApplication app) {
+        
         super(app);
+        int k;
 
         initComponents();
         //brak poziomego przewijania i zawijanie wierszy
         jTextArea1.setLineWrap(true);
         jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -86,6 +90,28 @@ public class SIProjektView extends FrameView {
                 }
             }
         });
+        //blok wczytujący na starcie listę plików katalogu data
+        
+        String currentDirectory = new String("./data/");//(System.getProperty("user.dir"));
+        //System.out.println(currentDirectory);
+        jList1.removeAll();
+        File dir = new File(currentDirectory);
+        FileFilter fileFilter = new FileFilter()
+        {
+            public boolean accept(File file)
+            {
+                    return file.isFile();
+            }
+        };
+        files = dir.listFiles(fileFilter);
+       
+        filesstr=new String[files.length];
+        for (k=0;k<files.length;k++)
+        {
+            filesstr[k]=new String(files[k].getName());
+        }
+        
+        jList1.setListData(filesstr);
     }
 
     @Action
@@ -96,6 +122,63 @@ public class SIProjektView extends FrameView {
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         SIProjektApp.getApplication().show(aboutBox);
+    }
+    
+    public void customWczytajKatalog()
+    {
+        int k;
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String currentDirectory = new String(System.getProperty("user.dir"));
+        int returnVal = chooser.showOpenDialog(jList1);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            currentDirectory = chooser.getSelectedFile().getPath();
+        }
+        jList1.removeAll();
+        File dir = new File(currentDirectory);
+        FileFilter fileFilter = new FileFilter()
+        {
+            public boolean accept(File file)
+            {
+                    return file.isFile();
+            }
+        };
+        files = dir.listFiles(fileFilter);
+        //do zrobienia - przerobienie files na listę stringów
+        filesstr=new String[files.length];
+        for (k=0;k<files.length;k++)
+        {
+            filesstr[k]=new String(files[k].getName());
+        }
+        
+        jList1.setListData(filesstr);
+    }
+    
+    public void customWczytajPlik()
+    {
+        //odczyt pliku do Stringa i potem wczytanie go do jtextarea
+        StringBuffer fileData = new StringBuffer(1000);
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(files[jList1.getSelectedIndex()]));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        char[] buf = new char[1024];
+        int numRead=0;
+        try {
+            while((numRead=reader.read(buf)) != -1){
+                fileData.append(buf, 0, numRead);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            reader.close();
+        } catch (IOException ex) {
+            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTextArea1.setText(fileData.toString());
     }
 
     /** This method is called from within the constructor to
@@ -138,6 +221,11 @@ public class SIProjektView extends FrameView {
             public Object getElementAt(int i) { return strings[i]; }
         });
         jList1.setName("jList1"); // NOI18N
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(jList1);
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SIProjektView.class);
@@ -289,52 +377,16 @@ public class SIProjektView extends FrameView {
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
         // TODO add your handling code here:
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        String currentDirectory = new String(System.getProperty("user.dir"));
-        int returnVal = chooser.showOpenDialog(jList1);
-        if (returnVal == JFileChooser.APPROVE_OPTION){
-            currentDirectory = chooser.getSelectedFile().getPath();
-        }
-        jList1.removeAll();
-        //currentDirectory = System.getProperty("user.dir");
-        File dir = new File(currentDirectory);
-        FileFilter fileFilter = new FileFilter()
-        {
-            public boolean accept(File file)
-            {
-                    return file.isFile();
-            }
-        };
-        files = dir.listFiles(fileFilter);
-        jList1.setListData(files);
+        customWczytajKatalog();
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        //odczyt pliku do Stringa i potem wczytanie go do jtextarea
-        StringBuffer fileData = new StringBuffer(1000);
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(files[jList1.getSelectedIndex()]));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        char[] buf = new char[1024];
-        int numRead=0;
-        try {
-            while((numRead=reader.read(buf)) != -1){
-                fileData.append(buf, 0, numRead);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            reader.close();
-        } catch (IOException ex) {
-            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        jTextArea1.setText(fileData.toString());
+
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        customWczytajPlik();
+    }//GEN-LAST:event_jList1ValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;

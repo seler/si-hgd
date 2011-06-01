@@ -82,6 +82,9 @@
                 </Property>
                 <Property name="name" type="java.lang.String" value="jList1" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="jList1ValueChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
