@@ -30,6 +30,7 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import java.io.BufferedReader; 
 import java.io.FileReader; 
+import javax.swing.table.TableColumn;
 //import weka.core.converters.ConverterUtils.DataSource;
 
 /**
@@ -116,9 +117,13 @@ public class SIProjektView extends FrameView {
         
         jList1.setListData(filesstr);
         
-        //TODO: ustawić <max> na ilość wczytanych pozycji z pliku arff
+        //TODO: ustawić <max> na ilość wczytanych pozycji z pliku arffdata.numInstances() 
         //iloscGrupjSpinner.setModel(new javax.swing.SpinnerNumberModel(3, 1, <max>, 1));
         
+        atrybutyjTable.getColumnModel().getColumn(0).setMinWidth(20);
+        atrybutyjTable.getColumnModel().getColumn(0).setMaxWidth(20);
+        atrybutyjTable.getColumnModel().getColumn(2).setMinWidth(40);
+        atrybutyjTable.getColumnModel().getColumn(2).setMaxWidth(40);
     }
 
     @Action
@@ -173,6 +178,8 @@ public class SIProjektView extends FrameView {
                 
                 jTextArea1.setText(data.toString());
                 //jTextArea1.setText(files[jList1.getSelectedIndex()].getAbsolutePath());
+                
+                iloscGrupjSpinner.setModel(new javax.swing.SpinnerNumberModel(3, 1, data.numInstances(), 1));
         } catch (Exception ex) {
             Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -279,16 +286,31 @@ public class SIProjektView extends FrameView {
 
         atrybutyjTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {new Boolean(true), null, new Double(1.0)},
+                {new Boolean(true), null, new Double(1.0)},
+                {new Boolean(false), null, new Double(1.0)},
+                {new Boolean(true), null, new Double(1.0)},
+                {new Boolean(false), null, new Double(1.0)}
             },
             new String [] {
-                "atrybut", "waga"
+                "", "atrybut", "waga"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         atrybutyjTable.setName("atrybutyjTable"); // NOI18N
         atrybutyjScrollPane.setViewportView(atrybutyjTable);
 
