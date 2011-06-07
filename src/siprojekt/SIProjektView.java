@@ -30,6 +30,12 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import java.io.BufferedReader; 
 import java.io.FileReader; 
+import weka.attributeSelection.CfsSubsetEval;
+import weka.attributeSelection.GreedyStepwise;
+import weka.classifiers.Evaluation;
+import weka.classifiers.meta.AttributeSelectedClassifier;
+import weka.classifiers.trees.J48;
+import weka.core.Debug.Random;
 //import weka.core.converters.ConverterUtils.DataSource;
 
 /**
@@ -38,6 +44,7 @@ import java.io.FileReader;
 public class SIProjektView extends FrameView {
     File[] files;
     String[] filesstr;
+    Instances data;
 
     public SIProjektView(SingleFrameApplication app) {
         
@@ -161,10 +168,31 @@ public class SIProjektView extends FrameView {
         jList1.setListData(filesstr);
     }
     
-    public void customWczytajPlik()
+    public void customWybierzAtrybuty() throws Exception
+    {
+        int i;
+        for (i=0;i<data.numAttributes();i++)
+            System.out.println(data.attribute(i).name());
+                ;
+        AttributeSelectedClassifier classifier = new AttributeSelectedClassifier();
+  CfsSubsetEval eval = new CfsSubsetEval();
+  GreedyStepwise search = new GreedyStepwise();
+  search.setSearchBackwards(true);
+  J48 base = new J48();
+  classifier.setClassifier(base);
+  classifier.setEvaluator(eval);
+  classifier.setSearch(search);
+  // 10-fold cross-validation
+  Evaluation evaluation = new Evaluation(data);
+  evaluation.crossValidateModel(classifier, data, 10, new Random(1));
+          
+  //System.out.println(classifier.toString());
+    }
+    
+    public void customWczytajPlik() throws Exception
     {
         DataSource source;
-        Instances data;
+        
         try {
             source = new DataSource(files[jList1.getSelectedIndex()].getAbsolutePath());
             data = source.getDataSet();
@@ -176,7 +204,7 @@ public class SIProjektView extends FrameView {
         } catch (Exception ex) {
             Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        customWybierzAtrybuty();
         //odczyt pliku do Stringa i potem wczytanie go do jtextarea
         /*StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = null;
@@ -468,7 +496,11 @@ public class SIProjektView extends FrameView {
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        customWczytajPlik();
+        try {
+            customWczytajPlik();
+        } catch (Exception ex) {
+            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jList1ValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
