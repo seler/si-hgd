@@ -176,6 +176,10 @@ public class SIProjektView extends FrameView {
         } catch (Exception ex) {
             Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //TODO: niech pokaże atrybuty w tabelce i obliczy ich wagi
+        
+        //TODO: niech wybierze atrybuty na podstawie zaznaczenia w tabelce
+        // http://weka.wikispaces.com/Use+WEKA+in+your+Java+code#toc27
         
         //odczyt pliku do Stringa i potem wczytanie go do jtextarea
         /*StringBuffer fileData = new StringBuffer(1000);
