@@ -26,6 +26,10 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import weka.core.Instances; 
+import weka.core.converters.ConverterUtils.DataSource;
+import java.io.BufferedReader; 
+import java.io.FileReader; 
 //import weka.core.converters.ConverterUtils.DataSource;
 
 /**
@@ -159,8 +163,22 @@ public class SIProjektView extends FrameView {
     
     public void customWczytajPlik()
     {
+        DataSource source;
+        Instances data;
+        try {
+            source = new DataSource(files[jList1.getSelectedIndex()].getAbsolutePath());
+            data = source.getDataSet();
+            if (data.classIndex() == -1)
+                data.setClassIndex(data.numAttributes() - 1);
+                
+                jTextArea1.setText(data.toString());
+                //jTextArea1.setText(files[jList1.getSelectedIndex()].getAbsolutePath());
+        } catch (Exception ex) {
+            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         //odczyt pliku do Stringa i potem wczytanie go do jtextarea
-        StringBuffer fileData = new StringBuffer(1000);
+        /*StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(files[jList1.getSelectedIndex()]));
@@ -181,7 +199,7 @@ public class SIProjektView extends FrameView {
         } catch (IOException ex) {
             Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        jTextArea1.setText(fileData.toString());
+        jTextArea1.setText(fileData.toString());*/
     }
 
     /** This method is called from within the constructor to
