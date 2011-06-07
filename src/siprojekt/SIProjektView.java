@@ -30,11 +30,14 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import java.io.BufferedReader; 
 import java.io.FileReader; 
+import java.util.AbstractList;
+import java.util.ArrayList;
 import weka.attributeSelection.CfsSubsetEval;
 import weka.attributeSelection.GreedyStepwise;
 import weka.classifiers.Evaluation;
 import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.classifiers.trees.J48;
+import weka.core.Attribute;
 import weka.core.Debug.Random;
 //import weka.core.converters.ConverterUtils.DataSource;
 
@@ -45,6 +48,8 @@ public class SIProjektView extends FrameView {
     File[] files;
     String[] filesstr;
     Instances data;
+    Attribute atrybuty[];
+    ArrayList listagrup[];
 
     public SIProjektView(SingleFrameApplication app) {
         
@@ -171,22 +176,31 @@ public class SIProjektView extends FrameView {
     public void customWybierzAtrybuty() throws Exception
     {
         int i;
+        atrybuty = new Attribute[data.numAttributes()];
         for (i=0;i<data.numAttributes();i++)
-            System.out.println(data.attribute(i).name());
-                ;
-        AttributeSelectedClassifier classifier = new AttributeSelectedClassifier();
-  CfsSubsetEval eval = new CfsSubsetEval();
-  GreedyStepwise search = new GreedyStepwise();
-  search.setSearchBackwards(true);
-  J48 base = new J48();
-  classifier.setClassifier(base);
-  classifier.setEvaluator(eval);
-  classifier.setSearch(search);
-  // 10-fold cross-validation
-  Evaluation evaluation = new Evaluation(data);
-  evaluation.crossValidateModel(classifier, data, 10, new Random(1));
+        atrybuty[i]=data.attribute(i);
+         
+    }
+    
+    public void customGrupujHierarchicznie()
+    {
+        
+    }
+    
+    public void customTworzListeGrup()
+    {
+        int k;
+        listagrup=new ArrayList[data.numInstances()];//utworzona lista grup
+        //teraz w każde pole wkładamy jednoelementową listę;
+        //System.out.println(data.numInstances());
+        for (k=0;k<data.numInstances();k++) 
+        {
+            listagrup[0].add(data.instance(k));
+            //System.out.println(listagrup[k].get(0));
+        }
+
           
-  //System.out.println(classifier.toString());
+        
     }
     
     public void customWczytajPlik() throws Exception
@@ -205,6 +219,7 @@ public class SIProjektView extends FrameView {
             Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
         }
         customWybierzAtrybuty();
+        customTworzListeGrup();
         //odczyt pliku do Stringa i potem wczytanie go do jtextarea
         /*StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = null;
