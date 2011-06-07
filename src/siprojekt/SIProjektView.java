@@ -31,6 +31,15 @@ import weka.core.converters.ConverterUtils.DataSource;
 import java.io.BufferedReader; 
 import java.io.FileReader; 
 import javax.swing.table.TableColumn;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import weka.attributeSelection.CfsSubsetEval;
+import weka.attributeSelection.GreedyStepwise;
+import weka.classifiers.Evaluation;
+import weka.classifiers.meta.AttributeSelectedClassifier;
+import weka.classifiers.trees.J48;
+import weka.core.Attribute;
+import weka.core.Debug.Random;
 //import weka.core.converters.ConverterUtils.DataSource;
 
 /**
@@ -39,6 +48,9 @@ import javax.swing.table.TableColumn;
 public class SIProjektView extends FrameView {
     File[] files;
     String[] filesstr;
+    Instances data;
+    Attribute atrybuty[];
+    ArrayList listagrup[];
 
     public SIProjektView(SingleFrameApplication app) {
         
@@ -166,10 +178,40 @@ public class SIProjektView extends FrameView {
         jList1.setListData(filesstr);
     }
     
-    public void customWczytajPlik()
+    public void customWybierzAtrybuty() throws Exception
+    {
+        int i;
+        atrybuty = new Attribute[data.numAttributes()];
+        for (i=0;i<data.numAttributes();i++)
+        atrybuty[i]=data.attribute(i);
+         
+    }
+    
+    public void customGrupujHierarchicznie()
+    {
+        
+    }
+    
+    public void customTworzListeGrup()
+    {
+        int k;
+        listagrup=new ArrayList[data.numInstances()];//utworzona lista grup
+        //teraz w każde pole wkładamy jednoelementową listę;
+        //System.out.println(data.numInstances());
+        for (k=0;k<data.numInstances();k++) 
+        {
+            listagrup[0].add(data.instance(k));
+            //System.out.println(listagrup[k].get(0));
+        }
+
+          
+        
+    }
+    
+    public void customWczytajPlik() throws Exception
     {
         DataSource source;
-        Instances data;
+        
         try {
             source = new DataSource(files[jList1.getSelectedIndex()].getAbsolutePath());
             data = source.getDataSet();
@@ -183,11 +225,10 @@ public class SIProjektView extends FrameView {
         } catch (Exception ex) {
             Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //TODO: niech pokaże atrybuty w tabelce i obliczy ich wagi
-        
-        //TODO: niech wybierze atrybuty na podstawie zaznaczenia w tabelce
-        // http://weka.wikispaces.com/Use+WEKA+in+your+Java+code#toc27
-        
+
+        customWybierzAtrybuty();
+        customTworzListeGrup();
+
         //odczyt pliku do Stringa i potem wczytanie go do jtextarea
         /*StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = null;
@@ -494,7 +535,11 @@ public class SIProjektView extends FrameView {
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-        customWczytajPlik();
+        try {
+            customWczytajPlik();
+        } catch (Exception ex) {
+            Logger.getLogger(SIProjektView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jList1ValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
