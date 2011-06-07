@@ -2,5 +2,6 @@ syntax: regexp
 ^nbproject/
 ^build/
 ^dist/
+^src/META-INF/
 ^build.xml$
 ^manifest.mf$
