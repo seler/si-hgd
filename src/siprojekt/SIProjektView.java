@@ -33,6 +33,7 @@ import java.io.FileReader;
 import javax.swing.table.TableColumn;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.List;
 import weka.attributeSelection.CfsSubsetEval;
 import weka.attributeSelection.GreedyStepwise;
 import weka.classifiers.Evaluation;
@@ -50,8 +51,12 @@ public class SIProjektView extends FrameView {
     String[] filesstr;
     Instances data;
     Attribute atrybuty[];
+<<<<<<< local
+    List listagrup[];
+=======
     ArrayList listagrup[];
     javax.swing.table.DefaultTableModel atrybutyTableModel;
+>>>>>>> other
 
     public SIProjektView(SingleFrameApplication app) {
         
@@ -228,7 +233,25 @@ public class SIProjektView extends FrameView {
     
     public void customGrupujHierarchicznie()
     {
-        
+        int k=0,w=0,i=0;
+        //dla listygrup obliczanie odległości między nimi
+        double[][] odleglosci;
+        odleglosci=new double[listagrup.length][listagrup.length];
+        //do kwadratowj tablicy wpisujemy odległości między elementami
+        for (k=0;k<listagrup.length;k++)
+            for (w=0;w<listagrup.length;w++)
+            {
+                odleglosci[k][w]=0;
+                if (k!=w) 
+                {
+                    for (i=0;i<atrybutyjTable.getRowCount();i++)
+                    {
+                        //if (atrybutyjTable.getValueAt(i, 0)) odleglosci[k][w]=listagrup[k].get(0).value(i);
+                        data.instance(i).value(i);
+                    }
+                    //odleglosci[k][w]=;
+                }
+            }
     }
     
     public void customTworzListeGrup()
@@ -239,8 +262,9 @@ public class SIProjektView extends FrameView {
         //System.out.println(data.numInstances());
         for (k=0;k<data.numInstances();k++) 
         {
-            listagrup[0].add(data.instance(k));
-            //System.out.println(listagrup[k].get(0));
+            listagrup[k]=new ArrayList();
+            listagrup[k].add(data.instance(k));
+            System.out.println(listagrup[k].get(0));
         }
 
           
@@ -337,7 +361,7 @@ public class SIProjektView extends FrameView {
         jPanel1.setMinimumSize(new java.awt.Dimension(200, 400));
         jPanel1.setName("jPanel1"); // NOI18N
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(siprojekt.SIProjektApp.class).getContext().getResourceMap(SIProjektView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(SIProjektView.class);
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
         jButton2.setName("jButton2"); // NOI18N
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -364,9 +388,42 @@ public class SIProjektView extends FrameView {
         atrybutyjScrollPane.setMinimumSize(new java.awt.Dimension(100, 107));
         atrybutyjScrollPane.setName("atrybutyjScrollPane"); // NOI18N
 
+<<<<<<< local
+        atrybutyjTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {new Boolean(true), null, new Double(1.0)},
+                {new Boolean(true), null, new Double(1.0)},
+                {new Boolean(false), null, new Double(1.0)},
+                {new Boolean(true), null, new Double(1.0)},
+                {new Boolean(false), null, new Double(1.0)}
+            },
+            new String [] {
+                "enabled", "atrybut", "waga"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+=======
         atrybutyjTable.setModel(atrybutyTableModel);
+>>>>>>> other
         atrybutyjTable.setName("atrybutyjTable"); // NOI18N
         atrybutyjScrollPane.setViewportView(atrybutyjTable);
+        atrybutyjTable.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("atrybutyjTable.columnModel.title0")); // NOI18N
+        atrybutyjTable.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("atrybutyjTable.columnModel.title1")); // NOI18N
+        atrybutyjTable.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("atrybutyjTable.columnModel.title2")); // NOI18N
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
@@ -396,16 +453,16 @@ public class SIProjektView extends FrameView {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, 0, 180, Short.MAX_VALUE)
-                    .addComponent(atrybutyjScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, 0, 190, Short.MAX_VALUE)
+                    .addComponent(atrybutyjScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                     .addComponent(jLabel2)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(iloscGrupjSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -414,9 +471,9 @@ public class SIProjektView extends FrameView {
                 .addContainerGap()
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(atrybutyjScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                .addComponent(atrybutyjScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -450,20 +507,20 @@ public class SIProjektView extends FrameView {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 566, Short.MAX_VALUE)
+            .addGap(0, 565, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 461, Short.MAX_VALUE)
+            .addGap(0, 458, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -477,7 +534,7 @@ public class SIProjektView extends FrameView {
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -485,7 +542,7 @@ public class SIProjektView extends FrameView {
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(siprojekt.SIProjektApp.class).getContext().getActionMap(SIProjektView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance().getContext().getActionMap(SIProjektView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -518,7 +575,7 @@ public class SIProjektView extends FrameView {
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 751, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 747, Short.MAX_VALUE)
                 .addComponent(statusAnimationLabel)
                 .addContainerGap())
         );
