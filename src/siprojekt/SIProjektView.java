@@ -51,12 +51,8 @@ public class SIProjektView extends FrameView {
     String[] filesstr;
     Instances data;
     Attribute atrybuty[];
-<<<<<<< local
-    List listagrup[];
-=======
     ArrayList listagrup[];
     javax.swing.table.DefaultTableModel atrybutyTableModel;
->>>>>>> other
 
     public SIProjektView(SingleFrameApplication app) {
         
@@ -388,37 +384,7 @@ public class SIProjektView extends FrameView {
         atrybutyjScrollPane.setMinimumSize(new java.awt.Dimension(100, 107));
         atrybutyjScrollPane.setName("atrybutyjScrollPane"); // NOI18N
 
-<<<<<<< local
-        atrybutyjTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {new Boolean(true), null, new Double(1.0)},
-                {new Boolean(true), null, new Double(1.0)},
-                {new Boolean(false), null, new Double(1.0)},
-                {new Boolean(true), null, new Double(1.0)},
-                {new Boolean(false), null, new Double(1.0)}
-            },
-            new String [] {
-                "enabled", "atrybut", "waga"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-=======
         atrybutyjTable.setModel(atrybutyTableModel);
->>>>>>> other
         atrybutyjTable.setName("atrybutyjTable"); // NOI18N
         atrybutyjScrollPane.setViewportView(atrybutyjTable);
         atrybutyjTable.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("atrybutyjTable.columnModel.title0")); // NOI18N
