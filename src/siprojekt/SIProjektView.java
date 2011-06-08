@@ -245,12 +245,12 @@ public class SIProjektView extends FrameView {
                     {
                         tmp1=(Instance)listagrup[k].get(0);
                         tmp2=(Instance)listagrup[w].get(0);
-                        //System.out.println(tmp.value(i));
-                        //System.out.println(atrybutyjTable.getValueAt(i, 0));
-                        if (atrybutyjTable.getValueAt(i, 0).toString()=="true") odleglosci[k][w]=(tmp1.value(i)-tmp2.value(i));
-                        //data.instance(i).value(i);
+                        
+                        if (atrybutyjTable.getValueAt(i, 0).toString()=="true") odleglosci[k][w]=Math.pow(tmp1.value(i)-tmp2.value(i),3);
+                        
                     }
-                    //odleglosci[k][w]=;
+                    odleglosci[k][w]=Math.pow(odleglosci[k][w],(1/3));
+                    
                 }
             }
     }
