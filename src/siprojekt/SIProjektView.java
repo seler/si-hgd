@@ -215,6 +215,7 @@ public class SIProjektView extends FrameView {
         }
         
         jList1.setListData(filesstr);
+        setEnabled(false);
     }
     
     private void wykasujTabeleAtrybuty(){
