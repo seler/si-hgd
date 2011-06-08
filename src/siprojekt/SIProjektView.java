@@ -208,8 +208,8 @@ public class SIProjektView extends FrameView {
     }
     
     private void wykasujTabeleAtrybuty(){
-        
-        for(int i = 0; i < atrybutyTableModel.getRowCount(); i++)
+        int rc=atrybutyTableModel.getRowCount();
+        for(int i = 0; i < rc; i++)
             atrybutyTableModel.removeRow(0);
     }
     
@@ -218,9 +218,10 @@ public class SIProjektView extends FrameView {
         int i;
         wykasujTabeleAtrybuty();
         
-        atrybuty = new Attribute[data.numAttributes()];
-        for (i=0;i<data.numAttributes();i++){
+        atrybuty = new Attribute[data.numAttributes()-1];
+        for (i=0;i<data.numAttributes()-1;i++){
             atrybuty[i]=data.attribute(i);
+            System.out.println(data.attribute(i));
             //atrybutyjTable.addRow(new Object[]{new Boolean(true), atrybuty[i].toString(), new Double(1)});
             atrybutyTableModel.addRow(new Object[]{new Boolean(true), data.attribute(i).name(), new Double(1.0)});
         }
@@ -260,7 +261,7 @@ public class SIProjektView extends FrameView {
         {
             listagrup[k]=new ArrayList();
             listagrup[k].add(data.instance(k));
-            System.out.println(listagrup[k].get(0));
+            //System.out.println(listagrup[k].get(0));
         }
 
           
