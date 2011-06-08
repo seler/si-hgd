@@ -51,11 +51,39 @@ public class SIProjektView extends FrameView {
     Instances data;
     Attribute atrybuty[];
     ArrayList listagrup[];
+    javax.swing.table.DefaultTableModel atrybutyTableModel;
 
     public SIProjektView(SingleFrameApplication app) {
         
         super(app);
         int k;
+        atrybutyTableModel = new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {new Boolean(true), new String("atrybut 1"), new Double(1.0)},
+                {new Boolean(true), new String("atrybut 2"), new Double(1.0)},
+                {new Boolean(false), new String("atrybut 3"), new Double(1.0)},
+                {new Boolean(true), new String("atrybut 4"), new Double(1.0)},
+                {new Boolean(false), new String("atrybut 5"), new Double(1.0)}
+            },
+            new String [] {
+                "", "atrybut", "waga"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        };
 
         initComponents();
         
@@ -131,7 +159,7 @@ public class SIProjektView extends FrameView {
         
         //TODO: ustawić <max> na ilość wczytanych pozycji z pliku arffdata.numInstances() 
         //iloscGrupjSpinner.setModel(new javax.swing.SpinnerNumberModel(3, 1, <max>, 1));
-        
+        //atrybutyjTable.setModel(atrybutyTableModel);
         atrybutyjTable.getColumnModel().getColumn(0).setMinWidth(20);
         atrybutyjTable.getColumnModel().getColumn(0).setMaxWidth(20);
         atrybutyjTable.getColumnModel().getColumn(2).setMinWidth(40);
@@ -178,13 +206,24 @@ public class SIProjektView extends FrameView {
         jList1.setListData(filesstr);
     }
     
+    private void wykasujTabeleAtrybuty(){
+        
+        for(int i = 0; i < atrybutyTableModel.getRowCount(); i++)
+            atrybutyTableModel.removeRow(0);
+    }
+    
     public void customWybierzAtrybuty() throws Exception
     {
         int i;
+        wykasujTabeleAtrybuty();
+        
         atrybuty = new Attribute[data.numAttributes()];
-        for (i=0;i<data.numAttributes();i++)
-        atrybuty[i]=data.attribute(i);
-         
+        for (i=0;i<data.numAttributes();i++){
+            atrybuty[i]=data.attribute(i);
+            //atrybutyjTable.addRow(new Object[]{new Boolean(true), atrybuty[i].toString(), new Double(1)});
+            atrybutyTableModel.addRow(new Object[]{new Boolean(true), data.attribute(i).name(), new Double(1.0)});
+        }
+        
     }
     
     public void customGrupujHierarchicznie()
@@ -325,33 +364,7 @@ public class SIProjektView extends FrameView {
         atrybutyjScrollPane.setMinimumSize(new java.awt.Dimension(100, 107));
         atrybutyjScrollPane.setName("atrybutyjScrollPane"); // NOI18N
 
-        atrybutyjTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {new Boolean(true), null, new Double(1.0)},
-                {new Boolean(true), null, new Double(1.0)},
-                {new Boolean(false), null, new Double(1.0)},
-                {new Boolean(true), null, new Double(1.0)},
-                {new Boolean(false), null, new Double(1.0)}
-            },
-            new String [] {
-                "", "atrybut", "waga"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        atrybutyjTable.setModel(atrybutyTableModel);
         atrybutyjTable.setName("atrybutyjTable"); // NOI18N
         atrybutyjScrollPane.setViewportView(atrybutyjTable);
 
