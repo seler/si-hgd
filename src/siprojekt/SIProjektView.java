@@ -165,6 +165,7 @@ public class SIProjektView extends FrameView {
         atrybutyjTable.getColumnModel().getColumn(0).setMaxWidth(20);
         atrybutyjTable.getColumnModel().getColumn(2).setMinWidth(40);
         atrybutyjTable.getColumnModel().getColumn(2).setMaxWidth(40);
+        setEnabled(false);
     }
 
     @Action
@@ -175,6 +176,15 @@ public class SIProjektView extends FrameView {
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         SIProjektApp.getApplication().show(aboutBox);
+    }
+    
+    private void setEnabled(Boolean e){
+        atrybutyjScrollPane.setEnabled(e);
+        atrybutyjTable.setEnabled(e);
+        metrykajSpinner.setEnabled(e);
+        strategiajComboBox.setEnabled(e);
+        iloscGrupjSpinner.setEnabled(e);
+        jButton3.setEnabled(e);
     }
     
     public void customWczytajKatalog()
@@ -317,6 +327,8 @@ public class SIProjektView extends FrameView {
 
         customWybierzAtrybuty();
         customTworzListeGrup();
+        
+        setEnabled(true);
 
         //odczyt pliku do Stringa i potem wczytanie go do jtextarea
         /*StringBuffer fileData = new StringBuffer(1000);
@@ -357,7 +369,7 @@ public class SIProjektView extends FrameView {
         atrybutyjScrollPane = new javax.swing.JScrollPane();
         atrybutyjTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        strategiajComboBox = new javax.swing.JComboBox();
         iloscGrupjSpinner = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -422,8 +434,8 @@ public class SIProjektView extends FrameView {
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "nearest first", "average first", "farest first"}));
-        jComboBox1.setName("jComboBox1"); // NOI18N
+        strategiajComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "nearest first", "average first", "farest first"}));
+        strategiajComboBox.setName("strategiajComboBox"); // NOI18N
 
         iloscGrupjSpinner.setModel(new javax.swing.SpinnerNumberModel(3, 1, 10, 1));
         iloscGrupjSpinner.setName("iloscGrupjSpinner"); // NOI18N
@@ -454,7 +466,7 @@ public class SIProjektView extends FrameView {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(atrybutyjScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE)
+                    .addComponent(strategiajComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 180, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
@@ -485,7 +497,7 @@ public class SIProjektView extends FrameView {
                 .addGap(5, 5, 5)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(strategiajComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(iloscGrupjSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -626,7 +638,6 @@ public class SIProjektView extends FrameView {
     private javax.swing.JSpinner iloscGrupjSpinner;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -643,6 +654,7 @@ public class SIProjektView extends FrameView {
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JComboBox strategiajComboBox;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;
