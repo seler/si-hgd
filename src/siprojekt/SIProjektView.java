@@ -52,6 +52,7 @@ public class SIProjektView extends FrameView {
     Attribute atrybuty[];
     ArrayList listagrup[];
     javax.swing.table.DefaultTableModel atrybutyTableModel;
+    double[][] odleglosci;
 
     public SIProjektView(SingleFrameApplication app) {
         
@@ -227,12 +228,12 @@ public class SIProjektView extends FrameView {
         
     }
     
-    public void customGrupujHierarchicznie()
+    public void customObliczOdleglosci()
     {
         int k=0,w=0,i=0;
         Instance tmp1,tmp2;
         //dla listygrup obliczanie odległości między nimi
-        double[][] odleglosci;
+        
         odleglosci=new double[listagrup.length][listagrup.length];
         //do kwadratowj tablicy wpisujemy odległości między elementami
         for (k=0;k<listagrup.length;k++)
@@ -253,6 +254,28 @@ public class SIProjektView extends FrameView {
                     
                 }
             }
+        
+        
+    }
+    
+    public void customGrupujHierarchicznie()
+    {
+        int k,w,mink,minw;
+        double min=99999;
+        
+        while (listagrup.length>Integer.parseInt(
+            iloscGrupjSpinner.getValue().toString()))
+        {
+            //szukanie minimalnej odleglosci
+            for (k=0;k<listagrup.length;k++)
+                for (w=k-1;w<listagrup.length;w++)
+                {
+                    if (odleglosci[k][w]<min) min=odleglosci[k][w];
+                    mink=k;
+                    minw=w;
+                }
+            //po znalezieniu minimalnej odległości
+        }
     }
     
     public void customTworzListeGrup()
@@ -568,7 +591,7 @@ public class SIProjektView extends FrameView {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        customGrupujHierarchicznie();
+        customObliczOdleglosci();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
