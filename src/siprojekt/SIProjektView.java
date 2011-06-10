@@ -165,6 +165,7 @@ public class SIProjektView extends FrameView {
         atrybutyjTable.getColumnModel().getColumn(0).setMaxWidth(20);
         atrybutyjTable.getColumnModel().getColumn(2).setMinWidth(40);
         atrybutyjTable.getColumnModel().getColumn(2).setMaxWidth(40);
+        wykasujTabeleAtrybuty();
         setEnabled(false);
     }
 
@@ -215,6 +216,7 @@ public class SIProjektView extends FrameView {
         }
         
         jList1.setListData(filesstr);
+        wykasujTabeleAtrybuty();
         setEnabled(false);
     }
     
