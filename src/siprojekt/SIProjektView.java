@@ -34,6 +34,7 @@ import javax.swing.table.TableColumn;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import weka.attributeSelection.CfsSubsetEval;
 import weka.attributeSelection.GreedyStepwise;
 import weka.classifiers.Evaluation;
@@ -50,7 +51,7 @@ public class SIProjektView extends FrameView {
     String[] filesstr;
     Instances data;
     Attribute atrybuty[];
-    ArrayList listagrup[];
+    Vector listagrup;
     javax.swing.table.DefaultTableModel atrybutyTableModel;
     double[][] odleglosci;
 
@@ -234,8 +235,6 @@ public class SIProjektView extends FrameView {
         atrybuty = new Attribute[data.numAttributes()-1];
         for (i=0;i<data.numAttributes()-1;i++){
             atrybuty[i]=data.attribute(i);
-            //System.out.println(data.attribute(i));
-            //atrybutyjTable.addRow(new Object[]{new Boolean(true), atrybuty[i].toString(), new Double(1)});
             atrybutyTableModel.addRow(new Object[]{new Boolean(true), data.attribute(i).name(), new Double(1.0)});
         }
         
@@ -243,30 +242,72 @@ public class SIProjektView extends FrameView {
     
     public void customObliczOdleglosci()
     {
-        int k=0,w=0,i=0;
+        int k=0,w=0,i=0,ix,iy;
         Instance tmp1,tmp2;
+        double odlegloscitmp[][];
+        double max,min,aver;
         //dla listygrup obliczanie odległości między nimi
         
-        odleglosci=new double[listagrup.length][listagrup.length];
+        odleglosci=new double[listagrup.size()][listagrup.size()];
         int metryka = Integer.parseInt(metrykajSpinner.getValue().toString());
         
         //do kwadratowj tablicy wpisujemy odległości między elementami
-        for (k=0;k<listagrup.length;k++)
-            for (w=0;w<listagrup.length;w++)
+        for (k=0;k<listagrup.size();k++)
+            for (w=0;w<listagrup.size();w++)
             {
                 odleglosci[k][w]=0;
+                int x=((Vector)listagrup.get(k)).size(),y=((Vector)listagrup.get(w)).size();
+                odlegloscitmp=new double[x][y];
                 if (k!=w) 
                 {
-                    for (i=0;i<atrybutyjTable.getRowCount();i++)
+                    //obliczanie wszystkich odleglosci miedzy wszystkimi obiektami, po czym zapsianie tylko jednej do glownej tablicy w zaleznosci od strategii
+                    for (ix=0;ix<x;ix++)
+                        for (iy=0;iy<y;iy++)
+                        {
+                            for (i=0;i<atrybutyjTable.getRowCount();i++)
                     {
-                        tmp1=(Instance)listagrup[k].get(0);
-                        tmp2=(Instance)listagrup[w].get(0);
+                        tmp1=(Instance)((Vector)listagrup.get(k)).get(ix);
+                        tmp2=(Instance)((Vector)listagrup.get(w)).get(iy);
                         
-                        if (atrybutyjTable.getValueAt(i, 0).toString()=="true") odleglosci[k][w]=Math.pow(tmp1.value(i)-tmp2.value(i),metryka);
-                        
+                        if (atrybutyjTable.getValueAt(i, 0).toString()=="true") odlegloscitmp[ix][iy]+=Math.pow(tmp1.value(i)-tmp2.value(i),metryka);
+                        //System.out.println("costam: "+odlegloscitmp[ix][iy]);
                     }
-                    odleglosci[k][w]=Math.pow(odleglosci[k][w],(1/metryka));
-                    
+                    //w linii niżej zamienia wszystkie odległości na 1.0 
+                    //odlegloscitmp[ix][iy]=Math.pow(odlegloscitmp[ix][iy],(1/metryka));
+                            //System.out.println("metryka"+metryka+"cudo: "+odlegloscitmp[ix][iy]);
+                        }
+                    //szukanie max min i average w tablicy odleglosci miedzy dwoma grupami
+                    max=0;
+                    min=99999;
+                    aver=0;
+                    for (ix=0;ix<x;ix++)
+                        for (iy=0;iy<y;iy++)
+                        {
+                            if (odlegloscitmp[ix][iy]>max) max=odlegloscitmp[ix][iy];
+                            if (odlegloscitmp[ix][iy]<min) min=odlegloscitmp[ix][iy];
+                        }
+                    for (ix=0;ix<x;ix++)
+                        for (iy=0;iy<y;iy++)
+                            if (odlegloscitmp[ix][iy]<aver+min-max) aver=odlegloscitmp[ix][iy];
+                    //System.out.println("min: "+min+" max: "+max+" aver: "+aver);
+                    if (strategiajComboBox.getSelectedIndex()==0)
+                    {
+                        odleglosci[k][w]=min;
+                        //System.out.println("nearest");
+                    }
+                            
+                    if (strategiajComboBox.getSelectedIndex()==1)
+                    {
+                        //System.out.println("average");
+                        odleglosci[k][w]=aver;
+                    }
+                            
+                    if (strategiajComboBox.getSelectedIndex()==2)
+                    {
+                        odleglosci[k][w]=max;
+                        //System.out.println("farest");
+                    }
+                            
                 }
             }
         
@@ -275,39 +316,110 @@ public class SIProjektView extends FrameView {
     
     public void customGrupujHierarchicznie()
     {
-        int k,w,mink,minw;
-        double min=99999;
-        
-        while (listagrup.length>Integer.parseInt(
+        //grupowanie działa dla nearest first, analogicznie musi wyszukiwać maksimum i average
+        int k,w,mink,minw,maxk,maxw,averk,averw;
+        double min=99999,max=0,aver=0;
+        //ArrayList listagruptmp[];
+        while (listagrup.size()>Integer.parseInt(
             iloscGrupjSpinner.getValue().toString()))
         {
+            
+            
             //szukanie minimalnej odleglosci
-            for (k=0;k<listagrup.length;k++)
-                for (w=k-1;w<listagrup.length;w++)
+            if (strategiajComboBox.getSelectedIndex()==0)
+            {
+                customObliczOdleglosci();
+                mink=999999;
+            minw=999999;
+            min=999999;
+            for (k=0;k<listagrup.size();k++)
+                for (w=k+1;w<listagrup.size();w++)
                 {
-                    if (odleglosci[k][w]<min) min=odleglosci[k][w];
-                    mink=k;
-                    minw=w;
+                    //System.out.println(odleglosci[k][w]);
+                    if (odleglosci[k][w]<min && odleglosci[k][w]!=0) 
+                    {
+                        min=odleglosci[k][w];
+                        mink=k;
+                        minw=w;
+                    }
                 }
-            //po znalezieniu minimalnej odległości
+            //System.out.println(mink+" "+minw+" "+min);
+            //po znalezieniu minimalnej odległości łączymy te dwie grupy
+            if (mink!=999999) 
+            {
+                ((Vector)listagrup.get(mink)).addAll((Vector)listagrup.get(minw));
+                listagrup.remove(minw);
+            }
+            }
+            
+            //szukanie maksymalnej odległości
+            if (strategiajComboBox.getSelectedIndex()==2)
+            {
+                customObliczOdleglosci();
+                maxk=999999;
+            maxw=999999;
+            max=0;
+            for (k=0;k<listagrup.size();k++)
+                for (w=k+1;w<listagrup.size();w++)
+                {
+                    //System.out.println(odleglosci[k][w]);
+                    if (odleglosci[k][w]>max && odleglosci[k][w]!=0) 
+                    {
+                        max=odleglosci[k][w];
+                        maxk=k;
+                        maxw=w;
+                    }
+                }
+            //System.out.println(mink+" "+minw+" "+min);
+            //po znalezieniu minimalnej odległości łączymy te dwie grupy
+            if (maxk!=999999) 
+            {
+                ((Vector)listagrup.get(maxk)).addAll((Vector)listagrup.get(maxw));
+                listagrup.remove(maxw);
+            }
+            }
+            
+            //szukanie average
+            if (strategiajComboBox.getSelectedIndex()==1)
+            {
+                customObliczOdleglosci();
+                averk=999999;
+            averw=999999;
+            aver=0;
+            for (k=0;k<listagrup.size();k++)
+                for (w=k+1;w<listagrup.size();w++)
+                {
+                    //System.out.println(odleglosci[k][w]);
+                    if (odleglosci[k][w]>aver-3 && odleglosci[k][w]!=0) 
+                    {
+                        aver=odleglosci[k][w];
+                        averk=k;
+                        averw=w;
+                    }
+                }
+            //System.out.println(mink+" "+minw+" "+min);
+            //po znalezieniu minimalnej odległości łączymy te dwie grupy
+            if (averk!=999999) 
+            {
+                ((Vector)listagrup.get(averk)).addAll((Vector)listagrup.get(averw));
+                listagrup.remove(averw);
+            }
+            }
         }
     }
     
     public void customTworzListeGrup()
     {
         int k;
-        listagrup=new ArrayList[data.numInstances()];//utworzona lista grup
-        //teraz w każde pole wkładamy jednoelementową listę;
-        //System.out.println(data.numInstances());
+        Vector tmp;
+        listagrup=new Vector(data.numInstances());//utworzona lista grup
+        //teraz w każde pole wkładamy jednoelementowy wektor;
         for (k=0;k<data.numInstances();k++) 
         {
-            listagrup[k]=new ArrayList();
-            listagrup[k].add(data.instance(k));
-            //System.out.println(listagrup[k].get(0));
+            tmp=new Vector();
+            tmp.add(data.instance(k));
+            listagrup.add(tmp);
         }
-
-          
-        
     }
     
     public void customWczytajPlik() throws Exception
@@ -624,7 +736,7 @@ public class SIProjektView extends FrameView {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
-        customObliczOdleglosci();
+        customGrupujHierarchicznie();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
