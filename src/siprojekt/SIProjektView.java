@@ -333,7 +333,6 @@ public class SIProjektView extends FrameView {
         //grupowanie działa dla nearest first, analogicznie musi wyszukiwać maksimum i average
         int k,w,mink,minw,maxk,maxw,averk,averw;
         double min=99999,max=0,aver=0;
-        //ArrayList listagruptmp[];
         while (listagrup.size()>Integer.parseInt(
             iloscGrupjSpinner.getValue().toString()))
         {
@@ -357,7 +356,7 @@ public class SIProjektView extends FrameView {
                         minw=w;
                     }
                 }
-            //System.out.println(mink+" "+minw+" "+min);
+            System.out.println(mink+" "+minw+" "+min);
             //po znalezieniu minimalnej odległości łączymy te dwie grupy
             if (mink!=999999) 
             {
@@ -384,7 +383,7 @@ public class SIProjektView extends FrameView {
                         maxw=w;
                     }
                 }
-            //System.out.println(mink+" "+minw+" "+min);
+            System.out.println(maxk+" "+maxw+" "+max);
             //po znalezieniu minimalnej odległości łączymy te dwie grupy
             if (maxk!=999999) 
             {
@@ -411,7 +410,7 @@ public class SIProjektView extends FrameView {
                         averw=w;
                     }
                 }
-            //System.out.println(mink+" "+minw+" "+min);
+            System.out.println(averk+" "+averw+" "+aver);
             //po znalezieniu minimalnej odległości łączymy te dwie grupy
             if (averk!=999999) 
             {
