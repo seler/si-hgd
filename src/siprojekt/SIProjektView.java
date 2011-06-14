@@ -221,6 +221,20 @@ public class SIProjektView extends FrameView {
         setEnabled(false);
     }
     
+    private void customWyświetlGrupy()
+    {
+        int k;
+        jTextArea1.setText("");
+        for (k=0;k<listagrup.size();k++)
+        {
+            
+            jTextArea1.append("\n"+"Grupa: "+(k+1)+"\n");
+            jTextArea1.append((listagrup.get(k)).toString());
+        }
+        
+        
+    }
+    
     private void wykasujTabeleAtrybuty(){
         int rc=atrybutyTableModel.getRowCount();
         for(int i = 0; i < rc; i++)
@@ -737,6 +751,7 @@ public class SIProjektView extends FrameView {
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         customGrupujHierarchicznie();
+        customWyświetlGrupy();
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
